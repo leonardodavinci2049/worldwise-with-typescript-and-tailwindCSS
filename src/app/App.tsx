@@ -1,7 +1,19 @@
-const App = () => {
-  return <div className="flex flex-col items-center justify-center h-screen bg-gray-100">
-    <h1 className="text-3xl bg-red-500 text-white font-bold">New Project React</h1>
-  </div>;
-};
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import Homepage from "../pages/Homepage";
+import Product from "../pages/Product";
+import Pricing from "../pages/Pricing";
+import PageNotFound from "../pages/PageNotFound";
 
+const App = () => {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Homepage />} />
+        <Route path="/pricing" element={<Pricing />} />
+        <Route path="/product" element={<Product />} />
+        <Route path="/*" element={<PageNotFound />} />
+      </Routes>
+    </BrowserRouter>
+  );
+};
 export default App;
