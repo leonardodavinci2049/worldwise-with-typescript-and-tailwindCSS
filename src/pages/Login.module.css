@@ -5,6 +5,8 @@
   min-height: calc(100vh - 5rem);
 }
 
+
+
 .form {
   background-color: var(--color-dark--2);
   border-radius: 7px;

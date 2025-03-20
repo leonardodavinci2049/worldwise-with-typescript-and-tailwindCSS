@@ -11,7 +11,7 @@
   --color-dark--0: #242a2e;
   --color-dark--1: #2d3439;
   --color-dark--2: #42484d;
-    --color-light--1: #aaa;
+  --color-light--1: #aaa;
   --color-light--2: #ececec;
   --color-light--3: #d6dee0;
 
@@ -31,17 +31,17 @@
     box-sizing: inherit; /* Herda box-sizing: border-box de html */
   }
   body {
-  font-family: "Manrope", sans-serif;
-  color: var(--color-light--2);
-  font-weight: 400;
-  line-height: 1.6;
+    font-family: "Manrope", sans-serif;
+    color: var(--color-light--2);
+    font-weight: 400;
+    line-height: 1.6;
   }
 
   label {
     font-size: 1.6rem;
     font-weight: 600;
   }
-  
+
   input,
   textarea {
     width: 100%;
@@ -53,12 +53,18 @@
     background-color: var(--color-light--3);
     transition: all 0.2s;
   }
-  
+
   input:focus {
     outline: none;
     background-color: #fff;
   }
-  
+
+  input::placeholder,
+  textarea::placeholder {
+    color: #000 !important;
+    opacity: 1 !important;
+  }
+
   .cta:link,
   .cta:visited {
     display: inline-block;
@@ -71,7 +77,6 @@
     padding: 1rem 3rem;
     border-radius: 5px;
   }
-
 }
 
 @layer components {

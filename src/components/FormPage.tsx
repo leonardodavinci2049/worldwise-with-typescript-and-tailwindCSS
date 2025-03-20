@@ -2,19 +2,22 @@
 
 import { useState } from "react";
 
-import styles from "./Form.module.css";
+import styles from "./FormPage.module.css";
 
-export function convertToEmoji(countryCode) {
+import ButtonBack from "./ButtonBack";
+import ButtonDefault from "./ButtonDefault";
+
+export function convertToEmoji(countryCode: string) {
   const codePoints = countryCode
     .toUpperCase()
     .split("")
-    .map((char) => 127397 + char.charCodeAt());
+    .map((char: string) => 127397 + char.charCodeAt(0));
   return String.fromCodePoint(...codePoints);
 }
 
-function Form() {
+function FormPage() {
   const [cityName, setCityName] = useState("");
-  const [country, setCountry] = useState("");
+  // const [country, setCountry] = useState("");
   const [date, setDate] = useState(new Date());
   const [notes, setNotes] = useState("");
 
@@ -34,8 +37,8 @@ function Form() {
         <label htmlFor="date">When did you go to {cityName}?</label>
         <input
           id="date"
-          onChange={(e) => setDate(e.target.value)}
-          value={date}
+          onChange={(e) => setDate(new Date(e.target.value))}
+          value={date.toISOString().split("T")[0]}
         />
       </div>
 
@@ -49,11 +52,13 @@ function Form() {
       </div>
 
       <div className={styles.buttons}>
-        <button>Add</button>
-        <button>&larr; Back</button>
+        <ButtonDefault type="primary" onClick={() => null}>
+          Add
+        </ButtonDefault>
+        <ButtonBack />
       </div>
     </form>
   );
 }
 
-export default Form;
+export default FormPage;
