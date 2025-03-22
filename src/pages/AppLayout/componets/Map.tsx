@@ -1,28 +1,95 @@
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import {
+  MapContainer,
+  Marker,
+  Popup,
+  TileLayer,
+  useMap,
+  useMapEvents,
+} from "react-leaflet";
+
 import styles from "./Map.module.css";
+import useCities from "../../../contexts/useCities";
+import { useGeolocation } from "../../../hooks/useGeolocation";
+import { useUrlPosition } from "../../../hooks/useUrlPosition";
+import ButtonDefault from "../../../common-components/ButtonDefault";
+import { useNavigate } from "react-router-dom";
 
 const Map = () => {
+  const { cities } = useCities();
+  const [mapPosition, setMapPosition] = useState([40, 0]);
 
-  const navigate = useNavigate();
-const [searchParams] = useSearchParams();
+  const {
+    isLoading: isLoadingPosition,
+    position: geolocationPosition,
+    getPosition,
+  } = useGeolocation({ lat: 40, lng: 0 });
 
-const lat = searchParams.get("lat");
-const lng = searchParams.get("lng");
+  const [mapLat, mapLng] = useUrlPosition();
 
-  return <div className={styles.mapContainer} onClick={() => navigate("form")}>
-    <h2>Map</h2>
-    <p className="text-black font-bold">Latitude: {lat}</p>
-    <p className="text-black font-bold">Longitude: {lng}</p>
-    <div className={styles.map}>
-      <img
-        src={`https://maps.googleapis.com/maps/api/staticmap?center=${lat},${lng}&zoom=10&size=600x300&key=YOUR_API_KEY`}
-        alt="Map"
-      />
+  useEffect(
+    function () {
+      if (mapLat && mapLng) setMapPosition([mapLat, mapLng]);
+    },
+    [mapLat, mapLng]
+  );
+
+  useEffect(
+    function () {
+      if (geolocationPosition)
+        setMapPosition([geolocationPosition.lat, geolocationPosition.lng]);
+    },
+    [geolocationPosition]
+  );
+
+  return (
+    <div className={styles.mapContainer}>
+      {!geolocationPosition && (
+        <ButtonDefault type="position" onClick={getPosition}>
+          {isLoadingPosition ? "Loading..." : "Use your position"}
+        </ButtonDefault>
+      )}
+      <MapContainer
+        center={mapLat ? [mapLat, mapLng] : mapPosition}
+        zoom={5}
+        scrollWheelZoom={true}
+        className={styles.map}
+      >
+        <TileLayer
+          attribution='&copy; <a href="https://www.openstreetmap.fr/hot/copyright">OpenStreetMap</a> contributors'
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        />
+        {cities.map((city) => (
+          <Marker
+            position={[city.position.lat, city.position.lng]}
+            key={city.id}
+          >
+            <Popup>
+              <span>{city.emoji}</span> <span>{city.cityName}</span>
+            </Popup>
+          </Marker>
+        ))}
+        <DetectClick />
+        <ChangeCenter position={mapLat ? [mapLat, mapLng] : mapPosition} />
+      </MapContainer>
     </div>
-    <button>
-     CLICK ME
-    </button>
-  </div>;
+  );
 };
+
+// Componente para atualizar o centro do mapa
+function ChangeCenter({ position }: { position: [number, number] }) {
+  const map = useMap();
+  map.setView(position);
+  return null;
+}
+
+function DetectClick() {
+  const navigate = useNavigate();
+
+  useMapEvents({
+    click: (e) => navigate(`form?lat=${e.latlng.lat}&lng=${e.latlng.lng}`),
+  });
+  return null;
+}
 
 export default Map;

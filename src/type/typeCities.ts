@@ -4,13 +4,13 @@ export interface Position {
 }
 
 export interface TypeCity {
+  id: string;
   cityName: string;
   country: string;
   emoji: string;
   date: string;
   notes: string;
   position: Position;
-  id: string;
 }
 
 export type TypeCities = TypeCity[];
