@@ -1,17 +1,18 @@
-import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
-import AppLayout from "../pages/AppLayout";
-
-import Homepage from "../pages/Homepage";
-import Product from "../pages/Product";
-import Pricing from "../pages/Pricing";
-import PageNotFound from "../pages/PageNotFound";
-import Login from "../pages/Login";
-import CityList from "../components/CityList";
-import City from "../components/City";
-import CountryList from "../components/CountryList";
-import FormPage from "../components/FormPage";
 import { useEffect, useState } from "react";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { TypeCities } from "../type/typeCities";
+// ------ Pages --------
+import AppLayout from "../pages/AppLayout/AppLayout";
+import Homepage from "../pages/Homepage/Homepage";
+import Login from "../pages/Login/Login";
+import Pricing from "../pages/Pricing/Pricing";
+import Product from "../pages/Product/Product";
+import PageNotFound from "../pages/PageNotFound/PageNotFound";
+// ------ Components --------
+import CityList from "../pages/AppLayout/pages/city/CityList";
+import City from "../pages/AppLayout/pages/city/City";
+import CountryList from "../pages/AppLayout/pages/countries/CountryList";
+import FormPage from "../pages/AppLayout/pages/FormPage";
 
 const BASE_URL = "http://localhost:9000";
 
