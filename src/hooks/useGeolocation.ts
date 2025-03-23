@@ -6,6 +6,7 @@ type PositionType = {
   lng: number;
 }
 
+
 export function useGeolocation(defaultPosition: PositionType) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [position, setPosition] = useState<PositionType | null>(defaultPosition);
