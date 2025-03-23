@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { TypeCity } from "../../../../type/typeCities";
 import styles from "./CityItem.module.css";
+import useCities from "../../../../contexts/useCities";
 
 const formatDate = (date: string | Date) =>
   new Intl.DateTimeFormat("en", {
@@ -14,12 +15,13 @@ type CityItemProps = {
 };
 
 const CityItem = ({ city }: CityItemProps) => {
+  const { currentCity, deleteCity } = useCities();
   const { cityName, emoji, date, id, position } = city;
 
   function handleClick(e: React.MouseEvent<HTMLButtonElement>) {
     e.preventDefault();
+    deleteCity(Number(id));
   }
-
   const flagemojiToPNG = (flag: string) => {
     const countryCode = Array.from(flag, (codeUnit) => codeUnit.codePointAt(0))
       .filter((codeUnit): codeUnit is number => codeUnit !== undefined)
@@ -34,7 +36,7 @@ const CityItem = ({ city }: CityItemProps) => {
     <li>
       <Link
         className={`${styles.cityItem} ${
-          id === id ? styles["cityItem--active"] : ""
+          id === currentCity.id ? styles["cityItem--active"] : ""
         }`}
         to={`${id}?lat=${position.lat}&lng=${position.lng}`}
       >

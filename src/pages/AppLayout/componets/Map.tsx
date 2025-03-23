@@ -41,6 +41,7 @@ const Map = () => {
     },
     [geolocationPosition]
   );
+console.log("geolocationPosition: ", geolocationPosition);
 
   return (
     <div className={styles.mapContainer}>
@@ -48,7 +49,7 @@ const Map = () => {
         <ButtonDefault type="position" onClick={getPosition}>
           {isLoadingPosition ? "Loading..." : "Use your position"}
         </ButtonDefault>
-      )}
+       )} 
       <MapContainer
         center={mapLat ? [mapLat, mapLng] : mapPosition}
         zoom={5}

@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 
 import styles from "./FormPage.module.css";
+import "react-datepicker/dist/react-datepicker.css";
 
 import ButtonBack from "../../../common-components/ButtonBack";
 import ButtonDefault from "../../../common-components/ButtonDefault";
@@ -13,8 +14,6 @@ import { useNavigate } from "react-router-dom";
 import DatePicker from "react-datepicker";
 import useCities from "../../../contexts/useCities";
 import { convertToEmoji } from "../../../core/UtlsFunctions/convertToEmoji";
-
-
 
 const BASE_URL = "https://api.bigdatacloud.net/data/reverse-geocode-client";
 
@@ -44,7 +43,7 @@ function FormPage() {
             `${BASE_URL}?latitude=${lat}&longitude=${lng}`
           );
           const data = await res.json();
-
+console.log( `${BASE_URL}?latitude=${lat}&longitude=${lng}`);
           if (!data.countryCode)
             throw new Error(
               "That doesn't seem to be a city. Click somewhere else 😉"
@@ -53,8 +52,12 @@ function FormPage() {
           setCityName(data.city || data.locality || "");
           setCountry(data.countryName);
           setEmoji(convertToEmoji(data.countryCode));
+
+
         } catch (err) {
-          setGeocodingError(err instanceof Error ? err.message : "An unknown error occurred");
+          setGeocodingError(
+            err instanceof Error ? err.message : "An unknown error occurred"
+          );
         } finally {
           setIsLoadingGeocoding(false);
         }
@@ -97,6 +100,7 @@ function FormPage() {
       <div className={styles.row}>
         <label htmlFor="cityName">City name</label>
         <input
+          className="text-black font-bold"
           id="cityName"
           onChange={(e) => setCityName(e.target.value)}
           value={cityName}
@@ -108,6 +112,7 @@ function FormPage() {
         <label htmlFor="date">When did you go to {cityName}?</label>
 
         <DatePicker
+          className="text-black font-bold"
           id="date"
           onChange={(date) => setDate(date)}
           selected={date}
@@ -118,6 +123,7 @@ function FormPage() {
       <div className={styles.row}>
         <label htmlFor="notes">Notes about your trip to {cityName}</label>
         <textarea
+          className="text-black font-bold"
           id="notes"
           onChange={(e) => setNotes(e.target.value)}
           value={notes}
