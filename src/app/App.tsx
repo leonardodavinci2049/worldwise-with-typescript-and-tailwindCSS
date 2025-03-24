@@ -47,38 +47,38 @@ const App = () => {
 
   return (
     <AuthProvider>
-    <CitiesProvider>
-      <BrowserRouter>
-        <Routes>
-          <Route index element={<Homepage />} />
+      <CitiesProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route index element={<Homepage />} />
 
-          <Route path="/pricing" element={<Pricing />} />
-          <Route path="/product" element={<Product />} />
-          <Route path="/login" element={<Login />} />
-          <Route
-            path="app"
-            element={
-               <ProtectedRoute>
-              <AppLayout />
-               </ProtectedRoute>
-            }
-          >
-            <Route index element={<Navigate replace to="cities" />} />
+            <Route path="/pricing" element={<Pricing />} />
+            <Route path="/product" element={<Product />} />
+            <Route path="/login" element={<Login />} />
             <Route
-              path="cities"
-              element={<CityList cities={cities} isLoading={isLoading} />}
-            />
-            <Route path="cities/:id" element={<City />} />
-            <Route
-              path="countries"
-              element={<CountryList cities={cities} isLoading={isLoading} />}
-            />
-            <Route path="form" element={<FormPage />} />
-          </Route>
-          <Route path="/*" element={<PageNotFound />} />
-        </Routes>
-      </BrowserRouter>
-    </CitiesProvider>
+              path="app"
+              element={
+                <ProtectedRoute>
+                  <AppLayout />
+                </ProtectedRoute>
+              }
+            >
+              <Route index element={<Navigate replace to="cities" />} />
+              <Route
+                path="cities"
+                element={<CityList cities={cities} isLoading={isLoading} />}
+              />
+              <Route path="cities/:id" element={<City />} />
+              <Route
+                path="countries"
+                element={<CountryList cities={cities} isLoading={isLoading} />}
+              />
+              <Route path="form" element={<FormPage />} />
+            </Route>
+            <Route path="/*" element={<PageNotFound />} />
+          </Routes>
+        </BrowserRouter>
+      </CitiesProvider>
     </AuthProvider>
   );
 };
