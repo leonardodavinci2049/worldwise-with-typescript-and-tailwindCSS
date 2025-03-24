@@ -12,7 +12,7 @@ import Message from "../../../common-components/Message";
 import { useUrlPosition } from "../../../hooks/useUrlPosition";
 import { useNavigate } from "react-router-dom";
 import DatePicker from "react-datepicker";
-import useCities from "../../../contexts/useCities";
+import useCities from "../../../contexts/cities/useCities";
 import { convertToEmoji } from "../../../core/UtlsFunctions/convertToEmoji";
 
 const BASE_URL = "https://api.bigdatacloud.net/data/reverse-geocode-client";

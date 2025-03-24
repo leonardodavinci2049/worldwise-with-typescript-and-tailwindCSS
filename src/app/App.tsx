@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { TypeCities } from "../type/typeCities";
-import { CitiesProvider } from "../contexts/CitiesProvider";
+import { CitiesProvider } from "../contexts/cities/CitiesProvider";
 // ------ Pages --------
 import AppLayout from "../pages/AppLayout/AppLayout";
 import Homepage from "../pages/Homepage/Homepage";
@@ -14,6 +14,8 @@ import CityList from "../pages/AppLayout/pages/city/CityList";
 import City from "../pages/AppLayout/pages/city/City";
 import CountryList from "../pages/AppLayout/pages/countries/CountryList";
 import FormPage from "../pages/AppLayout/pages/FormPage";
+import { AuthProvider } from "../contexts/auth/FakeAuthProvider";
+import ProtectedRoute from "../ProtectedRoute/ProtectedRoute";
 
 const BASE_URL = "http://localhost:9000";
 
@@ -44,6 +46,7 @@ const App = () => {
   }, []);
 
   return (
+    <AuthProvider>
     <CitiesProvider>
       <BrowserRouter>
         <Routes>
@@ -55,9 +58,9 @@ const App = () => {
           <Route
             path="app"
             element={
-              // <ProtectedRoute>
+               <ProtectedRoute>
               <AppLayout />
-              // </ProtectedRoute>
+               </ProtectedRoute>
             }
           >
             <Route index element={<Navigate replace to="cities" />} />
@@ -76,6 +79,7 @@ const App = () => {
         </Routes>
       </BrowserRouter>
     </CitiesProvider>
+    </AuthProvider>
   );
 };
 export default App;
