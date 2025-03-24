@@ -1,7 +1,8 @@
 import { ReactNode, useCallback, useEffect, useReducer } from "react";
-import { TypeCity } from "../type/typeCities";
+
 import { CitiesContext } from "./CitiesContext";
 import { initialState } from "./initialStateCity";
+import { TypeCity } from "../../type/typeCities";
 
 const BASE_URL = "http://localhost:9000";
 

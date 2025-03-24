@@ -1,6 +1,6 @@
 import { useContext } from "react";
-import { CitiesContextType } from "../type/CitiesContextType";
 import { CitiesContext } from "./CitiesContext";
+import { CitiesContextType } from "../../type/CitiesContextType";
 
 const useCities = (): CitiesContextType => {
   const context = useContext(CitiesContext);
