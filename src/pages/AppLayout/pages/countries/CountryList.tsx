@@ -1,20 +1,14 @@
-import { TypeCity } from "../../../../type/typeCities";
 import Message from "../../../../common-components/Message";
 import Spinner from "../../../../common-components/Spinner";
 import styles from "./CountryList.module.css";
 import CountryItem from "./CountryItem";
+import useCities from "../../../../contexts/cities/useCities";
 
-type CountryProps = {
-  cities: TypeCity[];
-  isLoading: boolean;
-};
 
-interface Country {
-  country: string;
-  emoji: string;
-}
 
-const CountryList = ({ cities, isLoading }: CountryProps) => {
+const CountryList = () => {
+  const { cities, isLoading } = useCities();
+
   if (isLoading) return <Spinner />;
 
   if (!cities.length)
@@ -22,7 +16,7 @@ const CountryList = ({ cities, isLoading }: CountryProps) => {
       <Message message="Add your first city by clicking on a city on the map" />
     );
 
-  const countries = cities.reduce<Country[]>((arr, city) => {
+  const countries = cities.reduce<{ country: string; emoji: string; }[]>((arr, city) => {
     if (!arr.map((el) => el.country).includes(city.country))
       return [...arr, { country: city.country, emoji: city.emoji }];
     else return arr;
