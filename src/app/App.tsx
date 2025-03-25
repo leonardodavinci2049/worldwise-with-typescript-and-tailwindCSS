@@ -1,14 +1,13 @@
-import { useEffect, useState } from "react";
+import { lazy, Suspense} from "react";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
-import { TypeCities } from "../type/typeCities";
 import { CitiesProvider } from "../contexts/cities/CitiesProvider";
 // ------ Pages --------
-import AppLayout from "../pages/AppLayout/AppLayout";
-import Homepage from "../pages/Homepage/Homepage";
-import Login from "../pages/Login/Login";
-import Pricing from "../pages/Pricing/Pricing";
-import Product from "../pages/Product/Product";
-import PageNotFound from "../pages/PageNotFound/PageNotFound";
+//import AppLayout from "../pages/AppLayout/AppLayout";
+// import Homepage from "../pages/Homepage/Homepage";
+// import Login from "../pages/Login/Login";
+// import Pricing from "../pages/Pricing/Pricing";
+//import Product from "../pages/Product/Product";
+//import PageNotFound from "../pages/PageNotFound/PageNotFound";
 // ------ Components --------
 import CityList from "../pages/AppLayout/pages/city/CityList";
 import City from "../pages/AppLayout/pages/city/City";
@@ -16,70 +15,50 @@ import CountryList from "../pages/AppLayout/pages/countries/CountryList";
 import FormPage from "../pages/AppLayout/pages/FormPage";
 import { AuthProvider } from "../contexts/auth/FakeAuthProvider";
 import ProtectedRoute from "../ProtectedRoute/ProtectedRoute";
+import SpinnerFullPage from "../common-components/SpinnerFullPage";
 
-const BASE_URL = "http://localhost:9000";
+const Homepage = lazy(() => import( "../pages/Homepage/Homepage"));
+const Product = lazy(() => import("../pages/Product/Product"));
+const Pricing = lazy(() => import("../pages/Pricing/Pricing"));
+const Login = lazy(() => import("../pages/Login/Login"));
+const AppLayout = lazy(() => import("../pages/AppLayout/AppLayout"));
+const PageNotFound = lazy(() => import("../pages/PageNotFound/PageNotFound"));
 
-const App = () => {
-  const [cities, setCities] = useState<TypeCities>([]);
-  const [isLoading, setIsLoading] = useState(false);
-  // const [error, setError] = useState(null);
-  // const [currentCity, setCurrentCity] = useState(null);
-  // const [currentCountry, setCurrentCountry] = useState(null);
+// dist/assets/index-59fcab9b.css   30.56 kB │ gzip:   5.14 kB
+// dist/assets/index-f7c12d89.js   572.44 kB │ gzip: 151.29 kB
 
-  useEffect(function () {
-    async function fetchCities() {
-      // dispatch({ type: "loading" });
-
-      try {
-        const res = await fetch(`${BASE_URL}/cities`);
-        const data = await res.json();
-        setCities(data);
-        setIsLoading(true);
-      } catch {
-        alert("Error fetching cities");
-      } finally {
-        setIsLoading(false);
-      }
-      // dispatch({ type: "loaded" });
-    }
-    fetchCities();
-  }, []);
-
+function App() {
   return (
     <AuthProvider>
       <CitiesProvider>
         <BrowserRouter>
-          <Routes>
-            <Route index element={<Homepage />} />
-
-            <Route path="/pricing" element={<Pricing />} />
-            <Route path="/product" element={<Product />} />
-            <Route path="/login" element={<Login />} />
-            <Route
-              path="app"
-              element={
-                <ProtectedRoute>
-                  <AppLayout />
-                </ProtectedRoute>
-              }
-            >
-              <Route index element={<Navigate replace to="cities" />} />
+          <Suspense fallback={<SpinnerFullPage />}>
+            <Routes>
+              <Route index element={<Homepage />} />
+              <Route path="product" element={<Product />} />
+              <Route path="pricing" element={<Pricing />} />
+              <Route path="login" element={<Login />} />
               <Route
-                path="cities"
-                element={<CityList cities={cities} isLoading={isLoading} />}
-              />
-              <Route path="cities/:id" element={<City />} />
-              <Route
-                path="countries"
-                element={<CountryList cities={cities} isLoading={isLoading} />}
-              />
-              <Route path="form" element={<FormPage />} />
-            </Route>
-            <Route path="/*" element={<PageNotFound />} />
-          </Routes>
+                path="app"
+                element={
+                  <ProtectedRoute>
+                    <AppLayout />
+                  </ProtectedRoute>
+                }
+              >
+                <Route index element={<Navigate replace to="cities" />} />
+                <Route path="cities" element={<CityList />} />
+                <Route path="cities/:id" element={<City />} />
+                <Route path="countries" element={<CountryList />} />
+                <Route path="form" element={<FormPage />} />
+              </Route>
+              <Route path="*" element={<PageNotFound />} />
+            </Routes>
+          </Suspense>
         </BrowserRouter>
       </CitiesProvider>
     </AuthProvider>
   );
-};
+}
+
 export default App;
