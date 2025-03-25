@@ -1,24 +1,38 @@
+import { useEffect } from "react";
 import ButtonBack from "../../../../common-components/ButtonBack";
+import Spinner from "../../../../common-components/Spinner";
+import useCities from "../../../../contexts/cities/useCities";
 import styles from "./City.module.css";
+import { useParams } from "react-router-dom";
 
-const formatDate = (date: string): string =>
-  new Intl.DateTimeFormat("en", {
+const formatDate = (date?: string): string => {
+  if (!date) return ""; // Retorna string vazia se não houver data
+  return new Intl.DateTimeFormat("en", {
     day: "numeric",
     month: "long",
     year: "numeric",
     weekday: "long",
   }).format(new Date(date));
+};
 
 function City() {
-  // TEMP DATA
-  const currentCity = {
-    cityName: "Lisbon",
-    emoji: "🇵🇹",
-    date: "2027-10-31T15:59:59.138Z",
-    notes: "My favorite city so far!",
-  };
+  const { id } = useParams();
+  const { getCity, currentCity, isLoading } = useCities();
+
+  useEffect(
+    function () {
+      if (id) {
+        const cityId = parseInt(id, 10);
+        if (!isNaN(cityId)) {
+          getCity(cityId);
+        }
+      }
+    },
+    [id, getCity]
+  );
 
   const { cityName, emoji, date, notes } = currentCity;
+  if (isLoading) return <Spinner />;
 
   return (
     <div className={styles.city}>
